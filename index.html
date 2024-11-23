@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi IA Poderosa</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bienvenido a Mi IA Poderosa</h1>
+        </header>
+
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">Hola, soy tu IA. ¿En qué te puedo ayudar?</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userMessage = document.getElementById('user-input').value;
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="message user-message">${userMessage}</div>`;
+
+            document.getElementById('user-input').value = '';  // Limpiar el campo de texto
+
+            // Enviar el mensaje al servidor
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage }),
+            });
+
+            const data = await response.json();
+            const botResponse = data.response;
+
+            // Agregar la respuesta del bot al chat
+            chatBox.innerHTML += `<div class="message bot-message">${botResponse}</div>`;
+        }
+    </script>
+</body>
+</html>
